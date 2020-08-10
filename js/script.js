@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // append search bar and button to div node
   studentSearchDiv.appendChild(searchBar);
   studentSearchDiv.appendChild(searchButton);
+
   // Append node to div
   searchContainer.appendChild(studentSearchDiv);
   const displayMessage = document.createElement('p');
@@ -29,51 +30,60 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchResults = [];
   searchContainer.addEventListener('click', (e) => {
   if (e.target.tagName === 'BUTTON') {
-    const search = searchBar.value;
-
-    for (let i = 0; i < studentLis.length; i++) {
-      if (studentLis[i].textContent.indexOf(search) > -1) {
-        searchResults.push(studentLis[i]);
-        searchBar.value = '';
-      }
-      if (search === '') {
-        studentLis[i].style.display = 'none';
-        displayMessage.innerHTML = 'There are no results for your search.';
-        searchBar.value = '';
-        searchResults = [];
-
-      } else {
-        console.log('Made it to else')
-        studentLis[i].style.display = 'none';
-        showPage(searchResults, 1);
-        searchResults = [];
-      }
-    }
-  }
-});
-
-  searchContainer.addEventListener('keyup', (e) => {
-  if (e.target.tagName === 'INPUT') {
-    displayMessage.innerHTML = '';
-    const search = searchBar.value;
-
+    const search = searchBar.value.toLowerCase();
+    searchBar.value = '';
     for (let i = 0; i < studentLis.length; i++) {
       if (studentLis[i].textContent.indexOf(search) > -1) {
         searchResults.push(studentLis[i]);
       }
-      if (search === '') {
+      if (!searchResults.length) {
+        console.log('got here')
+        console.log(searchResults.length)
+        // displayMessage.innerHTML = 'There are no results for your search.';
         studentLis[i].style.display = 'none';
-        displayMessage.innerHTML = 'There are no results for your search.';
-        searchResults = [];
-      } else {
+        searchBar.value = '';
+        // searchResults.length = 0;
+    } else {
         console.log('Made it to else')
+        console.log("second ");
+        console.log(searchResults);
+        // displayMessage.innerHTML = 'There are no results for your search.';
         studentLis[i].style.display = 'none';
         showPage(searchResults, 1);
-        searchResults = [];
+        // searchResults.length = 0;
       }
     }
   }
+  searchResults.length = 0;
 });
+
+//   searchContainer.addEventListener('keyup', (e) => {
+//   if (e.target.tagName === 'INPUT') {
+//     displayMessage.innerHTML = '';
+//     const search = searchBar.value.toLowerCase();
+//
+//     for (let i = 0; i < studentLis.length; i++) {
+//       if (studentLis[i].textContent.indexOf(search) > -1) {
+//         searchResults.push(studentLis[i]);
+//       }
+//       if (!searchResults) {
+//         studentLis[i].style.display = 'none';
+//         displayMessage.innerHTML = 'There are no results for your search.';
+//         console.log(!searchResults);
+//         console.log(studentContainer.lastElementChild.textContent);
+//         if (studentContainer.lastElementChild.textContent === 'There are no results for your search.') {
+//           studentContainer.removeChild(studentContainer.lastElementChild);
+//         }
+//         searchResults = [];
+//       } else {
+//         console.log('Made it to else')
+//         studentLis[i].style.display = 'none';
+//         showPage(searchResults, 1);
+//         searchResults = [];
+//       }
+//     }
+//   }
+// });
 
 
   // Control how many results user sees per page.
@@ -144,6 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
         a.classList.remove('active');
       }
     });
+
+
     // Add the active class to the link that was just clicked.
     ul.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') {
