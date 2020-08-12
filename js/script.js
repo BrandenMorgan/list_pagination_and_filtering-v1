@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const studentSearchDiv = document.createElement('div');
   studentSearchDiv.className = 'student-search';
 
+
   const searchBar = document.createElement('input');
   searchBar.type = 'text';
   searchBar.placeholder = 'Search for students...';
@@ -29,61 +30,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let searchResults = [];
   searchContainer.addEventListener('click', (e) => {
-  if (e.target.tagName === 'BUTTON') {
+    if (e.target.tagName === 'BUTTON') {
+      const paginationLinks = document.getElementsByClassName('pagination')[0];
+      paginationLinks.remove(1);
+      const search = searchBar.value.toLowerCase();
+      searchBar.value = '';
+      for (let i = 0; i < studentLis.length; i++) {
+        if (studentLis[i].textContent.indexOf(search) > -1) {
+          searchResults.push(studentLis[i]);
+      }
+    }
+    if (!searchResults.length) {
+      for (let i = 0; i < studentLis.length; i++) {
+        displayMessage.innerHTML = 'There are no results for your search.';
+        studentLis[i].style.display = 'none';
+        searchBar.value = '';
+      }
+    } else {
+        for (let i = 0; i < studentLis.length; i++) {
+          displayMessage.innerHTML = '';
+          studentLis[i].style.display = 'none';
+        }
+      }
+      // second argument? set new event listener
+        showPage(searchResults, 1);
+        appendPageLinks(searchResults);
+        console.log(searchResults.length);
+    }
+      searchResults.length = 0;
+   });
+
+  searchContainer.addEventListener('keyup', (e) => {
+  if (e.target.tagName === 'INPUT') {
+    const paginationLinks = document.getElementsByClassName('pagination')[0];
+    paginationLinks.remove(1);
+    displayMessage.innerHTML = '';
     const search = searchBar.value.toLowerCase();
-    searchBar.value = '';
+
     for (let i = 0; i < studentLis.length; i++) {
       if (studentLis[i].textContent.indexOf(search) > -1) {
         searchResults.push(studentLis[i]);
       }
+    }
       if (!searchResults.length) {
-        console.log('got here')
-        console.log(searchResults.length)
-        // displayMessage.innerHTML = 'There are no results for your search.';
-        studentLis[i].style.display = 'none';
-        searchBar.value = '';
-        // searchResults.length = 0;
-    } else {
-        console.log('Made it to else')
-        console.log("second ");
-        console.log(searchResults);
-        // displayMessage.innerHTML = 'There are no results for your search.';
+        for (let i = 0; i < studentLis.length; i++) {
+          studentLis[i].style.display = 'none';
+          displayMessage.innerHTML = 'There are no results for your search.';
+        }
+      } else {
+        for (let i = 0; i < studentLis.length; i++) {
         studentLis[i].style.display = 'none';
         showPage(searchResults, 1);
-        // searchResults.length = 0;
       }
+        console.log(searchResults.length);
+        appendPageLinks(searchResults);
     }
   }
   searchResults.length = 0;
 });
-
-//   searchContainer.addEventListener('keyup', (e) => {
-//   if (e.target.tagName === 'INPUT') {
-//     displayMessage.innerHTML = '';
-//     const search = searchBar.value.toLowerCase();
-//
-//     for (let i = 0; i < studentLis.length; i++) {
-//       if (studentLis[i].textContent.indexOf(search) > -1) {
-//         searchResults.push(studentLis[i]);
-//       }
-//       if (!searchResults) {
-//         studentLis[i].style.display = 'none';
-//         displayMessage.innerHTML = 'There are no results for your search.';
-//         console.log(!searchResults);
-//         console.log(studentContainer.lastElementChild.textContent);
-//         if (studentContainer.lastElementChild.textContent === 'There are no results for your search.') {
-//           studentContainer.removeChild(studentContainer.lastElementChild);
-//         }
-//         searchResults = [];
-//       } else {
-//         console.log('Made it to else')
-//         studentLis[i].style.display = 'none';
-//         showPage(searchResults, 1);
-//         searchResults = [];
-//       }
-//     }
-//   }
-// });
 
 
   // Control how many results user sees per page.
@@ -116,6 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageDiv = document.querySelector('.page');
     pageDiv.appendChild(div);
 
+
+    // const paginationLinks = pageDiv.lastElementChild;
+    // console.log(paginationLinks);
+
     // Store the pagination links
     const ul = document.createElement('ul');
     div.appendChild(ul);
@@ -146,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
           studentContainer.removeChild(studentContainer.lastElementChild);
         }
         const page = e.target.textContent;
+        console.log(page);
         showPage(list, page);
       }
       // Loop over pagination links to remove active class from all links
@@ -164,6 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-    showPage(studentLis, 1);
-    appendPageLinks(studentLis);
+      showPage(studentLis, 1);
+      appendPageLinks(studentLis);
 });
