@@ -31,10 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchResults = [];
   searchContainer.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
-      // const paginationLinks = document.getElementsByClassName('pagination')[0];
-      // if (paginationLinks) {
-      //     paginationLinks.remove(1);
-      // }
+      if (searchResults.length) {
+        searchResults.length = 0;
+      }
       const search = searchBar.value.toLowerCase();
       searchBar.value = '';
       for (let i = 0; i < studentLis.length; i++) {
@@ -63,11 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchContainer.addEventListener('keyup', (e) => {
   if (e.target.tagName === 'INPUT') {
-    // const paginationLinks = document.getElementsByClassName('pagination')[0];
-    // if (paginationLinks) {
-    //   paginationLinks.remove(1);
-    // }
-    // displayMessage.innerHTML = '';
+    if (searchResults.length) {
+      searchResults.length = 0;
+    }
     const search = searchBar.value.toLowerCase();
     for (let i = 0; i < studentLis.length; i++) {
       // names selected on line 5
@@ -156,9 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
     */
     ul.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') {
-        // if (studentContainer.lastElementChild.textContent === 'There are no results for your search.') {
-        //   studentContainer.removeChild(studentContainer.lastElementChild);
-        // }
         const page = e.target.textContent;
         showPage(list, page);
         console.log(list);
