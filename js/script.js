@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Get all list items with all student info
   const studentLis = document.getElementsByClassName('student-item cf');
-
+  const names = document.getElementsByTagName('h3');
   // Select parent node sibling to append to
   const searchContainer = studentLis[0].parentNode.previousElementSibling;
 
@@ -31,44 +31,47 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchResults = [];
   searchContainer.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
-      const paginationLinks = document.getElementsByClassName('pagination')[0];
-      paginationLinks.remove(1);
+      // const paginationLinks = document.getElementsByClassName('pagination')[0];
+      // if (paginationLinks) {
+      //     paginationLinks.remove(1);
+      // }
       const search = searchBar.value.toLowerCase();
       searchBar.value = '';
       for (let i = 0; i < studentLis.length; i++) {
-        if (studentLis[i].textContent.indexOf(search) > -1) {
+        // names selected on line 5
+        if (names[i].textContent.indexOf(search) > -1) {
           searchResults.push(studentLis[i]);
       }
     }
     if (!searchResults.length) {
       for (let i = 0; i < studentLis.length; i++) {
         displayMessage.innerHTML = 'There are no results for your search.';
-        studentLis[i].style.display = 'none';
         searchBar.value = '';
       }
     } else {
         for (let i = 0; i < studentLis.length; i++) {
           displayMessage.innerHTML = '';
-          studentLis[i].style.display = 'none';
         }
       }
-      // second argument? set new event listener
         showPage(searchResults, 1);
         appendPageLinks(searchResults);
         console.log(searchResults.length);
     }
-      searchResults.length = 0;
+      //** problem is here **
+      // searchResults.length = 0;
    });
 
   searchContainer.addEventListener('keyup', (e) => {
   if (e.target.tagName === 'INPUT') {
-    const paginationLinks = document.getElementsByClassName('pagination')[0];
-    paginationLinks.remove(1);
-    displayMessage.innerHTML = '';
+    // const paginationLinks = document.getElementsByClassName('pagination')[0];
+    // if (paginationLinks) {
+    //   paginationLinks.remove(1);
+    // }
+    // displayMessage.innerHTML = '';
     const search = searchBar.value.toLowerCase();
-
     for (let i = 0; i < studentLis.length; i++) {
-      if (studentLis[i].textContent.indexOf(search) > -1) {
+      // names selected on line 5
+      if (names[i].textContent.indexOf(search) > -1) {
         searchResults.push(studentLis[i]);
       }
     }
@@ -79,16 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } else {
         for (let i = 0; i < studentLis.length; i++) {
-        studentLis[i].style.display = 'none';
-        showPage(searchResults, 1);
+          displayMessage.innerHTML = '';
+          studentLis[i].style.display = 'none';
       }
-        console.log(searchResults.length);
-        appendPageLinks(searchResults);
     }
+    showPage(searchResults, 1);
+    console.log(searchResults.length);
+    appendPageLinks(searchResults);
   }
-  searchResults.length = 0;
+  // **problem is here**
+  // searchResults.length = 0;
 });
-
 
   // Control how many results user sees per page.
   const showPage = (list, page) => {
@@ -110,6 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Generate, append, and add functionality to the pagination buttons.
   const appendPageLinks = (list) => {
+    const paginationLinks = document.getElementsByClassName('pagination')[0];
+    if (paginationLinks) {
+      paginationLinks.remove(1);
+    }
+
 
     // totalPages gets how many pages are needed for the 'list' parameter
     const totalPages = list.length / 10;
@@ -120,16 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageDiv = document.querySelector('.page');
     pageDiv.appendChild(div);
 
-
-    // const paginationLinks = pageDiv.lastElementChild;
-    // console.log(paginationLinks);
-
     // Store the pagination links
     const ul = document.createElement('ul');
     div.appendChild(ul);
     /*
       for every page, add li and a tags with the page number text
-      Store lis in "links" array for later use on line 117
+      Store lis in "links" array for later use
     */
     const links = [];
     for (let i = 0; i < totalPages; i++) {
@@ -144,18 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
       li.appendChild(a);
       links.push(li);
     }
+
     /*
       Add an event listener to each a tag. When they are clicked
       call the showPage function to display the appropriate page
     */
     ul.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') {
-        if (studentContainer.lastElementChild.textContent === 'There are no results for your search.') {
-          studentContainer.removeChild(studentContainer.lastElementChild);
-        }
+        // if (studentContainer.lastElementChild.textContent === 'There are no results for your search.') {
+        //   studentContainer.removeChild(studentContainer.lastElementChild);
+        // }
         const page = e.target.textContent;
-        console.log(page);
         showPage(list, page);
+        console.log(list);
+
       }
       // Loop over pagination links to remove active class from all links
       for (let i = 0; i < links.length; i++) {
@@ -163,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
         a.classList.remove('active');
       }
     });
-
 
     // Add the active class to the link that was just clicked.
     ul.addEventListener('click', (e) => {
@@ -173,6 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-      showPage(studentLis, 1);
-      appendPageLinks(studentLis);
+  showPage(studentLis, 1);
+  appendPageLinks(studentLis);
 });
