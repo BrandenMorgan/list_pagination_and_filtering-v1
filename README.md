@@ -1,2 +1,2 @@
 # list_pagination_and_filtering-v1
- Implement pagination on an existing webpage with Javascript.
+ Using unobtrusive JavaScript implement pagination and search bar functionality to filter through "students" on an existing webpage.
